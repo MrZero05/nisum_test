@@ -26,7 +26,7 @@ The following guides illustrate how to use features concretely:
 
 * Run the project locally with default profile. Default port 8080
 * URL for swagger: http://localhost:8080/swagger-ui/ to documentation
-* Import postman collection "nisum-test.json" available in resources path of repository
+* Import postman collection "nisumtest.postman_collection.json" available in resources path of repository
 * This Project uses H2 memory database. 
 * You can access database using http://localhost:8080/h2-console, the credentials are in application.properties
 

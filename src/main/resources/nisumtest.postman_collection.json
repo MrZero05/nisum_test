@@ -1,0 +1,67 @@
+{
+	"info": {
+		"_postman_id": "75c090f5-9de6-47da-9169-8a7599aa6f8b",
+		"name": "nisumtest",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "createUser",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Juan Rodriguez\",\r\n    \"email\": \"juan@rodriguez.org\",\r\n    \"password\": \"hunter2\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"1234567\",\r\n            \"citycode\": \"1\",\r\n            \"countrycode\": \"57\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/nisumtest/createUser",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nisumtest",
+						"createUser"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "updateuser",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"Juan Admin\",\r\n    \"email\": \"juanAdmin@google.org\",\r\n    \"password\": \"huntertest\",\r\n    \"phones\": [\r\n        {\r\n            \"number\": \"7654333\",\r\n            \"citycode\": \"2\",\r\n            \"countrycode\": \"57\"\r\n        }\r\n    ]\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/nisumtest/42a569a4-b352-482f-af6c-d404f1fc8ac9",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"nisumtest",
+						"42a569a4-b352-482f-af6c-d404f1fc8ac9"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
