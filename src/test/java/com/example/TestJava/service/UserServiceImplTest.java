@@ -1,9 +1,6 @@
 package com.example.TestJava.service;
 
-import com.example.TestJava.dto.PhoneDto;
-import com.example.TestJava.dto.RequestUserDto;
-import com.example.TestJava.dto.ResponseUserDto;
-import com.example.TestJava.dto.UserMapper;
+import com.example.TestJava.dto.*;
 import com.example.TestJava.model.User;
 import com.example.TestJava.repository.PhoneRepository;
 import com.example.TestJava.repository.UserRepository;
@@ -26,7 +23,7 @@ import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 
-class UserServiceImplTest {
+public class UserServiceImplTest {
 
     @InjectMocks
     private UserServiceImpl userService;
@@ -47,18 +44,29 @@ class UserServiceImplTest {
     private PhoneRepository phoneRepository;
 
     private RequestUserDto requestUserDto;
+    private UpdateRequestUserDto updateRequestUserDto;
     private User user;
     private ResponseUserDto responseUserDto;
+    private UUID userId;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
+
+        userId = UUID.randomUUID();
 
         requestUserDto = RequestUserDto.builder()
                 .name("Test User")
                 .email("test@example.com")
                 .password("password")
                 .phones(Arrays.asList(new PhoneDto("123456789", "01", "91")))
+                .build();
+
+        updateRequestUserDto = UpdateRequestUserDto.builder()
+                .name("Updated User")
+                .email("updated@example.com")
+                .password("newpassword")
+                .phones(Arrays.asList(new PhoneDto("987654321", "02", "92")))
                 .build();
 
         user = User.builder()
@@ -74,7 +82,7 @@ class UserServiceImplTest {
                 .build();
 
         responseUserDto = ResponseUserDto.builder()
-                .idUser(UUID.randomUUID())
+                .idUser(userId)
                 .createdDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
                 .lastLogin(LocalDateTime.now())
@@ -107,5 +115,22 @@ class UserServiceImplTest {
         doThrow(IllegalArgumentException.class).when(formatValidator).validatePassword(any(String.class));
 
         assertThrows(IllegalArgumentException.class, () -> userService.createUser(requestUserDto));
+    }
+
+    @Test
+    void testUpdateUser() {
+        when(userRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.of(user));
+        when(userMapper.userModelToUseresponseUserDto(any(User.class))).thenReturn(responseUserDto);
+
+        ResponseUserDto result = userService.updateUser(userId, updateRequestUserDto);
+
+        assertEquals(responseUserDto, result);
+    }
+
+    @Test
+    void testUpdateUser_UserNotFound() {
+        when(userRepository.findById(any(UUID.class))).thenReturn(java.util.Optional.empty());
+
+        assertThrows(IllegalArgumentException.class, () -> userService.updateUser(userId, updateRequestUserDto));
     }
 }

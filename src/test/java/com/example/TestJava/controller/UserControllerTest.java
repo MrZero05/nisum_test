@@ -7,6 +7,7 @@ import java.util.UUID;
 import com.example.TestJava.dto.PhoneDto;
 import com.example.TestJava.dto.RequestUserDto;
 import com.example.TestJava.dto.ResponseUserDto;
+import com.example.TestJava.dto.UpdateRequestUserDto;
 import com.example.TestJava.service.IUserService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,6 +21,7 @@ import org.springframework.test.web.servlet.MockMvc;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -36,10 +38,14 @@ public class UserControllerTest {
     private ObjectMapper objectMapper;
 
     private RequestUserDto requestUserDto;
+    private UpdateRequestUserDto updateRequestUserDto;
     private ResponseUserDto responseUserDto;
+    private UUID userId;
 
     @BeforeEach
     void setUp() {
+        userId = UUID.randomUUID();
+
         requestUserDto = RequestUserDto.builder()
                 .name("Test User")
                 .email("test@example.com")
@@ -47,8 +53,15 @@ public class UserControllerTest {
                 .phones(Arrays.asList(new PhoneDto("123456789", "01", "91")))
                 .build();
 
+        updateRequestUserDto = UpdateRequestUserDto.builder()
+                .name("Updated User")
+                .email("updated@example.com")
+                .password("newpassword")
+                .phones(Arrays.asList(new PhoneDto("987654321", "02", "92")))
+                .build();
+
         responseUserDto = ResponseUserDto.builder()
-                .idUser(UUID.randomUUID())
+                .idUser(userId)
                 .createdDate(LocalDateTime.now())
                 .modifiedDate(LocalDateTime.now())
                 .lastLogin(LocalDateTime.now())
@@ -56,7 +69,6 @@ public class UserControllerTest {
                 .isActive(true)
                 .build();
     }
-
 
     @Test
     void testCreateUser() throws Exception {
@@ -67,5 +79,28 @@ public class UserControllerTest {
                         .content(objectMapper.writeValueAsString(requestUserDto)))
                 .andExpect(status().isOk())
                 .andExpect(content().json(objectMapper.writeValueAsString(responseUserDto)));
+    }
+
+    @Test
+    void testUpdateUser() throws Exception {
+        when(userService.updateUser(any(UUID.class), any(UpdateRequestUserDto.class))).thenReturn(responseUserDto);
+
+        mockMvc.perform(patch("/nisumtest/{uuid}", userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequestUserDto)))
+                .andExpect(status().isOk())
+                .andExpect(content().json(objectMapper.writeValueAsString(responseUserDto)));
+    }
+
+    @Test
+    void testUpdateUser_UserNotFound() throws Exception {
+        when(userService.updateUser(any(UUID.class), any(UpdateRequestUserDto.class)))
+                .thenThrow(new IllegalArgumentException("User not exist"));
+
+        mockMvc.perform(patch("/nisumtest/{uuid}", userId)
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(updateRequestUserDto)))
+                .andExpect(status().isNotFound())
+                .andExpect(content().string("User not exist"));
     }
 }
