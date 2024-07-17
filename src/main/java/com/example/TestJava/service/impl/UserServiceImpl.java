@@ -71,40 +71,72 @@ public class UserServiceImpl implements IUserService {
     @Override
     @Transactional
     public ResponseUserDto updateUser(UUID uuid, UpdateRequestUserDto requestUserDto) {
-        //Find Existing user
+
         User user = userRepository.findById(uuid)
                 .orElseThrow(() -> new IllegalArgumentException("User not exist"));
 
-        //Validate and update email
+        // Validate and upate email
         if (requestUserDto.getEmail() != null) {
             formatValidator.validateEmail(requestUserDto.getEmail());
             user.setEmail(requestUserDto.getEmail());
         }
 
-        //Update password
+        // validate and update password
         if (requestUserDto.getPassword() != null) {
             formatValidator.validatePassword(requestUserDto.getPassword());
             user.setUser_password(requestUserDto.getPassword());
         }
 
-        //Update name
+        // Update name
         if (requestUserDto.getName() != null) {
             user.setUser_name(requestUserDto.getName());
         }
 
-        //Update phones
+        // Update last conecction
         user.setLast_login(LocalDateTime.now());
-        User savedUser = userRepository.save(user);
-        if (requestUserDto.getPhones() != null) {
 
-            List<Phone> phones = userMapper.phoneDtosToPhones(requestUserDto.getPhones());
-            savedUser = userRepository.save(savedUser);
-            for (Phone phone : phones) {
-                phone.setUser(savedUser);
-                phoneRepository.save(phone);
+        // Save updated user
+        User savedUser = userRepository.save(user);
+
+        // Update phones
+        if (requestUserDto.getPhones() != null) {
+            List<Phone> phonesToUpdate = userMapper.phoneDtosToPhones(requestUserDto.getPhones());
+
+            for (Phone phoneToUpdate : phonesToUpdate) {
+                boolean phoneExists = savedUser.getPhones().stream().anyMatch(
+                        existingPhone -> existingPhone.getNumber().equals(phoneToUpdate.getNumber()) &&
+                                existingPhone.getCitycode().equals(phoneToUpdate.getCitycode()) &&
+                                existingPhone.getCountrycode().equals(phoneToUpdate.getCountrycode())
+                );
+
+                if (phoneExists) {
+                    throw new IllegalArgumentException("User already has a phone with the same number, city code, and country code");
+                }
+
+                if (phoneToUpdate.getUuid() != null) {
+                    Phone existingPhone = phoneRepository.findById(phoneToUpdate.getUuid()).orElse(null);
+                    if (existingPhone != null) {
+                        // Update existing phone
+                        existingPhone.setNumber(phoneToUpdate.getNumber());
+                        existingPhone.setCitycode(phoneToUpdate.getCitycode());
+                        existingPhone.setCountrycode(phoneToUpdate.getCountrycode());
+                        phoneRepository.save(existingPhone);
+                    } else {
+                        // add new phone
+                        phoneToUpdate.setUser(savedUser);
+                        phoneRepository.save(phoneToUpdate);
+                    }
+                } else {
+                    // add new phone
+                    phoneToUpdate.setUuid(UUID.randomUUID());
+                    phoneToUpdate.setUser(savedUser);
+                    phoneRepository.save(phoneToUpdate);
+                }
             }
         }
 
         return userMapper.userModelToUseresponseUserDto(savedUser);
     }
+
+
 }
