@@ -1,0 +1,280 @@
+@startuml
+
+/' diagram meta data start
+config=StructureConfiguration;
+{
+  "projectClassification": {
+    "searchMode": "OpenProject", // OpenProject, AllProjects
+    "includedProjects": "",
+    "pathEndKeywords": "*.impl",
+    "isClientPath": "",
+    "isClientName": "",
+    "isTestPath": "",
+    "isTestName": "",
+    "isMappingPath": "",
+    "isMappingName": "",
+    "isDataAccessPath": "",
+    "isDataAccessName": "",
+    "isDataStructurePath": "",
+    "isDataStructureName": "",
+    "isInterfaceStructuresPath": "",
+    "isInterfaceStructuresName": "",
+    "isEntryPointPath": "",
+    "isEntryPointName": "",
+    "treatFinalFieldsAsMandatory": false
+  },
+  "graphRestriction": {
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "removeByInheritance": "", // inheritance/annotation based filtering is done in a second step
+    "removeByAnnotation": "",
+    "removeByClassPackage": "", // cleanup the graph after inheritance/annotation based filtering is done
+    "removeByClassName": "",
+    "cutMappings": false,
+    "cutEnum": true,
+    "cutTests": true,
+    "cutClient": true,
+    "cutDataAccess": false,
+    "cutInterfaceStructures": false,
+    "cutDataStructures": false,
+    "cutGetterAndSetter": true,
+    "cutConstructors": true
+  },
+  "graphTraversal": {
+    "forwardDepth": 6,
+    "backwardDepth": 6,
+    "classPackageExcludeFilter": "",
+    "classPackageIncludeFilter": "",
+    "classNameExcludeFilter": "",
+    "classNameIncludeFilter": "",
+    "methodNameExcludeFilter": "",
+    "methodNameIncludeFilter": "",
+    "hideMappings": false,
+    "hideDataStructures": false,
+    "hidePrivateMethods": true,
+    "hideInterfaceCalls": true, // indirection: implementation -> interface (is hidden) -> implementation
+    "onlyShowApplicationEntryPoints": false, // root node is included
+    "useMethodCallsForStructureDiagram": "ForwardOnly" // ForwardOnly, BothDirections, No
+  },
+  "details": {
+    "aggregation": "GroupByClass", // ByClass, GroupByClass, None
+    "showClassGenericTypes": true,
+    "showMethods": true,
+    "showMethodParameterNames": true,
+    "showMethodParameterTypes": true,
+    "showMethodReturnType": true,
+    "showPackageLevels": 2,
+    "showDetailedClassStructure": true
+  },
+  "rootClass": "com.example.TestJava.controller.UserController",
+  "extensionCallbackMethod": "" // qualified.class.name#methodName - signature: public static String method(String)
+}
+diagram meta data end '/
+
+
+
+digraph g {
+    rankdir="TB"
+    splines=polyline
+    
+
+'nodes 
+subgraph cluster_1322970774 { 
+   	label=example
+	labeljust=l
+	fillcolor="#ececec"
+	style=filled
+   
+   subgraph cluster_858654200 { 
+   	label=TestJava
+	labeljust=l
+	fillcolor="#d8d8d8"
+	style=filled
+   
+   BaseModelUuid1428323008[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)BaseModelUuid</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   uuid: UUID [0..1]</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+FormatValidator1435865160[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)FormatValidator</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   emailRegex: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   passwordRegex: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   userRepository: UserRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ validateEmail(email: String)</TD></TR>
+<TR><TD ALIGN="LEFT" >+ validatePassword(password: String)</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+JwtUtil1435865160[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)JwtUtil</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   SECRET_KEY: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >- createToken(claims: Map&lt;String, Object&gt;, subject: String): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- extractAllClaims(token: String): Claims</TD></TR>
+<TR><TD ALIGN="LEFT" >+ extractClaim(token: String, claimsResolver: Function&lt;Claims, T&gt;): T</TD></TR>
+<TR><TD ALIGN="LEFT" >+ extractExpiration(token: String): Date</TD></TR>
+<TR><TD ALIGN="LEFT" >+ extractUsername(token: String): String</TD></TR>
+<TR><TD ALIGN="LEFT" >+ generateToken(email: String): String</TD></TR>
+<TR><TD ALIGN="LEFT" >- isTokenExpired(token: String): Boolean</TD></TR>
+<TR><TD ALIGN="LEFT" >+ validateToken(token: String, email: String): Boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+Phone1428323008[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)Phone</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   citycode: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   countrycode: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   number: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   user: User [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ builder(): PhoneBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" ># canEqual(other: Object): boolean</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+ResponseUserDto1793654582[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)ResponseUserDto</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   createdDate: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   idUser: UUID [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   isActive: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   lastLogin: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   modifiedDate: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   token: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ builder(): ResponseUserDtoBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" >+ toBuilder(): ResponseUserDtoBuilder</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+User1428323008[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)User</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   active: boolean [1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   creation_date: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   email: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   last_login: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   modified_date: LocalDateTime [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   phones: List&lt;Phone&gt; [0..*]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   token: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   user_name: String [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   user_password: String [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ builder(): UserBuilder</TD></TR>
+<TR><TD ALIGN="LEFT" ># canEqual(other: Object): boolean</TD></TR>
+<TR><TD ALIGN="LEFT" ># onCreate()</TD></TR>
+<TR><TD ALIGN="LEFT" ># onUpdate()</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+UserController1259140507[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)UserController</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   userService: IUserService [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createUser(requestUserDto: RequestUserDto): ResponseEntity&lt;ResponseUserDto&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateUser(id: UUID, requestUserDto: UpdateRequestUserDto): ResponseEntity&lt;?&gt;</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+UserMapperImpl1793654582[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)UserMapperImpl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" ># phoneDtoToPhone(phoneDto: PhoneDto): Phone</TD></TR>
+<TR><TD ALIGN="LEFT" >+ phoneDtosToPhones(phones: List&lt;PhoneDto&gt;): List&lt;Phone&gt;</TD></TR>
+<TR><TD ALIGN="LEFT" >+ requestUserDtoToUser(requestUserDto: RequestUserDto): User</TD></TR>
+<TR><TD ALIGN="LEFT" >+ userModelToUseresponseUserDto(user: User): ResponseUserDto</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+
+UserServiceImpl1222322622[
+	label=<<TABLE BORDER="1" CELLBORDER="0" CELLPADDING="4" CELLSPACING="0">
+<TR><TD ALIGN="LEFT" >(C)UserServiceImpl</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >-   formatValidator: FormatValidator [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   jwtUtil: JwtUtil [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   phoneRepository: PhoneRepository [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   userMapper: UserMapper [0..1]</TD></TR>
+<TR><TD ALIGN="LEFT" >-   userRepository: UserRepository [0..1]</TD></TR>
+<HR/>
+<TR><TD ALIGN="LEFT" >+ createUser(requestUserDto: RequestUserDto): ResponseUserDto</TD></TR>
+<TR><TD ALIGN="LEFT" >+ updateUser(uuid: UUID, requestUserDto: UpdateRequestUserDto): ResponseUserDto</TD></TR>
+</TABLE>>
+	style=filled
+	margin=0
+	shape=plaintext
+	fillcolor="#FFFFFF"
+];
+} 
+} 
+
+'edges    
+BaseModelUuid1428323008 -> Phone1428323008[arrowhead=none, arrowtail=empty, dir=both];
+BaseModelUuid1428323008 -> User1428323008[arrowhead=none, arrowtail=empty, dir=both];
+Phone1428323008 -> User1428323008[label="user
+[0..1]"];
+User1428323008 -> Phone1428323008[label="phones
+[0..*]"];
+UserController1259140507 -> UserServiceImpl1222322622[arrowhead=none];
+UserMapperImpl1793654582 -> Phone1428323008[label="phoneDtoToPhone() -> builder()"];
+UserMapperImpl1793654582 -> ResponseUserDto1793654582[label="userModelToUseresponseUserDto() -> builder()"];
+UserMapperImpl1793654582 -> User1428323008[label="requestUserDtoToUser() -> builder()"];
+UserServiceImpl1222322622 -> FormatValidator1435865160[label="formatValidator
+[0..1]"];
+UserServiceImpl1222322622 -> JwtUtil1435865160[label="jwtUtil
+[0..1]"];
+UserServiceImpl1222322622 -> UserMapperImpl1793654582[arrowhead=none];
+    
+}
+@enduml
